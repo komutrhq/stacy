@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import ErrorElement from "@/components/error-element";
+import NotFound from "@/components/not-found";
+import { buildGlobRoutes } from "@/lib/route-builder";
 import App from "./App";
-import ErrorElement from "./components/error-element";
-import NotFound from "./components/not-found";
-import { buildGlobRoutes } from "./lib/route-builder";
 
 const globTree = import.meta.glob(["./pages/**/*.tsx", "!./pages/**/components/**/*.tsx", "!./pages/**/_components/**/*.tsx"]);
 
