@@ -22,10 +22,6 @@ export default defineConfig(({ mode }) => {
       APP_VERSION: JSON.stringify(pkg.version),
       APP_NAME: JSON.stringify(pkg.name),
       GIT_COMMIT_SHA: JSON.stringify(getGitHash()),
-      dependencies: JSON.stringify(pkg.dependencies),
-      devDependencies: JSON.stringify(pkg.devDependencies),
-      README: JSON.stringify(readme),
-      pkg: JSON.stringify(pkg)
     },
     server: {
       port: 8080,
