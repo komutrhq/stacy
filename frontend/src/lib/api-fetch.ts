@@ -88,10 +88,11 @@ export const getFetchErrorMessage = (error: Error) => {
 
 export const refreshToken = async () => {
   if (refreshPromise) {
-    // delay before refreshing
-    await new Promise((resolve) => setTimeout(resolve, 250 + Math.random() * 1000));
+    // Await the existing refreshPromise
+    return refreshPromise;
   } else if (refreshCount >= 3) {
     redirectToLogin();
+    throw new Error("Maximum refresh attempts exceeded");
   }
 
   if (!refreshPromise && refreshCount < 3) {
@@ -104,7 +105,7 @@ export const refreshToken = async () => {
           refresh_token: token.RefreshToken,
         },
       });
-      const res = (await refreshPromise) as IRefreshTokenResponse;
+      const res = await refreshPromise;
 
       setStorage<ITokenAtom>(
         "token",
@@ -119,8 +120,10 @@ export const refreshToken = async () => {
       );
 
       refreshCount = 0;
+      return res;
     } catch {
       refreshCount++;
+      throw new Error("Token refresh failed");
     } finally {
       refreshPromise = null;
     }
