@@ -54,15 +54,7 @@ func Run() {
 
 		router := gin.Default()
 		router.Use(static.Serve("/", static.LocalFile("./frontend/dist", true)))
-
-		api := router.Group("/api")
-		{
-			api.GET("/", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "pong",
-				})
-			})
-		}
+		router.NoRoute(func(c *gin.Context) { c.File("./frontend/dist/index.html") })
 
 		server := &http.Server{
 			Addr:    fmt.Sprintf(":%d", cfg.FrontendPort),

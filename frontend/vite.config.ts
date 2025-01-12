@@ -7,7 +7,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { getGitHash } from "./scripts/lib.ts";
 
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
-const readme = readFileSync("README.md", "utf8");
+ 
 
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };

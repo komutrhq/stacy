@@ -1,9 +1,5 @@
 import type React from "react";
-
-export interface ShowIfProps {
-  children: React.ReactNode;
-  condition: boolean;
-}
+import { memo } from "react";
 
 interface ShowIfProps {
   children?: React.ReactNode;
@@ -11,7 +7,7 @@ interface ShowIfProps {
   render?: () => React.ReactNode;
 }
 
-const ShowIf: React.FC<ShowIfProps> = React.memo((props) => {
+const ShowIf: React.FC<ShowIfProps> = memo((props) => {
   const { children, condition } = props;
 
   if (!condition) return null;
