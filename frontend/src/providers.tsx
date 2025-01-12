@@ -8,7 +8,14 @@ import Spin from "@/components/spin";
 import { TooltipProvider } from "@/components/tooltip";
 import { queryClient } from "@/lib/query-client";
 
-const loadFeatures = () => import("./framer-lazy-feature").then((res) => res.default);
+const loadFeatures = () =>
+  import("./framer-lazy-feature")
+    .then((res) => res.default)
+    .catch((error) => {
+      console.error("Failed to load framer-motion features:", error);
+      // Fallback to basic features or throw if critical
+      throw error;
+    });
 
 export const Providers: FC<PropsWithChildren> = ({ children }) => (
   <LazyMotion features={loadFeatures} strict key="framer">
