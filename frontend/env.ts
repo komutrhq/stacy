@@ -14,6 +14,7 @@ export const env = createEnv({
     VITE_API_URL: z.string().url().transform((url) => url.replace(/\/+$/, "")),
     VITE_POSTHOG_KEY: z.string(),
     VITE_POSTHOG_HOST: z.string(),
+    VITE_DISABLE_LOGIN: z.boolean().default(false),
   },
   emptyStringAsUndefined: true,
   runtimeEnv: import.meta.env,
