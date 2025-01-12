@@ -1,11 +1,7 @@
-import { HelmetProvider } from "react-helmet-async";
+import { Outlet } from "react-router-dom";
 
 function App() {
-	return (
-		<HelmetProvider>
-			<h1 className="text-3xl font-bold font-display">Hello world!</h1>
-		</HelmetProvider>
-	);
+  return <Outlet />;
 }
 
 export default App;

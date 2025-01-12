@@ -4,11 +4,21 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/flag-in-hole.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stacy</title>
+    <title>Stacy: REST-based Queue and Scheduler</title>
     <meta name="description" content="REST-based Queue and Scheduler" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.global = window;
+    </script>
+    <script type="module">
+      import { Buffer } from "buffer/"; // <-- no typo here ("/")
+      import process from "process";
+
+      window.Buffer = Buffer;
+      window.process = process;
+    </script>
   </body>
 </html>
