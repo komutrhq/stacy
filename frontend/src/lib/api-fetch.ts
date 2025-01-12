@@ -63,7 +63,7 @@ export const apiFetch = ofetch.create({
 function redirectToLogin() {
   if (window.location.pathname === "/login") return;
 
-  for (const key in ["register", "token"]) {
+  for (const key of ["register", "token"]) {
     Cookies.remove(Buffer.from(key).toString("base64"));
   }
 
