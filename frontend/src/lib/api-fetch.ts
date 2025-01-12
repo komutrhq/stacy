@@ -49,6 +49,11 @@ const OfetchBaseConfig: FetchOptions = {
 
     if (context.response.status === 401) {
       await refreshToken();
+
+      // Retry the original request with the new token
+      await apiFetch(context.request, context.options);
+
+      return;
     }
 
     throw new ApiError(context.response._data.error);
