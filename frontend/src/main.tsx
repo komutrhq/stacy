@@ -3,18 +3,20 @@ import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import { RouterProvider } from "react-router-dom";
 
-import "./index.css";
-
-import { Providers } from "./providers";
-import { router } from "./router";
+import "@/index.css";
+import { ErrorBoundary } from "@/components/error-boundary";
+import { Providers } from "@/providers";
+import { router } from "@/router";
 
 // biome-ignore lint/style/noNonNullAssertion: this is a basic setup of react
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <HelmetProvider>
-      <Providers>
-        <RouterProvider router={router} />
-      </Providers>
-    </HelmetProvider>
+    <ErrorBoundary>
+      <HelmetProvider>
+        <Providers>
+          <RouterProvider router={router} />
+        </Providers>
+      </HelmetProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );
