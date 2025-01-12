@@ -95,7 +95,8 @@ export const refreshToken = async () => {
   if (refreshPromise) {
     // Await the existing refreshPromise
     return refreshPromise;
-  } else if (refreshCount >= 3) {
+  }
+  if (refreshCount >= 3) {
     redirectToLogin();
     throw new Error("Maximum refresh attempts exceeded");
   }

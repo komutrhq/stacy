@@ -19,6 +19,6 @@ const ShowIf: React.FC<ShowIfProps> = React.memo((props) => {
   return <>{props.render?.() ?? children}</>;
 });
 
-ShowIf.displayName = 'ShowIf';
+ShowIf.displayName = "ShowIf";
 
 export default ShowIf;
