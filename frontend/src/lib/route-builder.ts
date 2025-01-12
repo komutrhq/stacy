@@ -140,7 +140,7 @@ export function buildGlobRoutes(
           const globGetter = get(glob, accessPath);
 
           if (pathGetterSet.has(`${segmentPathKey}.tsx`)) {
-            console.error(`duplicate path: ${accessPath}`);
+            throw new Error(`Duplicate path detected: ${accessPath}`);
           }
           pathGetterSet.add(accessPath);
 
