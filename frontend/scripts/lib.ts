@@ -1,6 +1,6 @@
 import { execSync } from "node:child_process";
 
-export const getGitHash = () => {
+export const getGitHash = (): string => {
   try {
     return execSync("git rev-parse HEAD").toString().trim();
   } catch (e) {
