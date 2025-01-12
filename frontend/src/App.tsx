@@ -1,4 +1,4 @@
-import { HelmetProvider } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function App() {
 	return (
