@@ -16,12 +16,13 @@ import (
 	"stacy/config"
 )
 
-func Run() {
-	cfg := config.LoadConfig()
-
+func Run(cfg *config.Config) {
 	// Listen for signals
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+
+	os.Setenv("VITE_ALLOW_GOOGLE_SSO", fmt.Sprintf("%t", cfg.AllowGoogleSSO))
+	os.Setenv("VITE_ALLOW_GITHUB_SSO", fmt.Sprintf("%t", cfg.AllowGithubSSO))
 
 	if cfg.Env == "development" {
 		cmd := exec.Command("pnpm", "dev", fmt.Sprintf("--port=%d", cfg.FrontendPort))

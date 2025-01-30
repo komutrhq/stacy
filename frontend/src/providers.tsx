@@ -19,7 +19,7 @@ const loadFeatures = () =>
 
 export const Providers: FC<PropsWithChildren> = ({ children }) => (
   <LazyMotion features={loadFeatures} strict key="framer">
-    <MotionConfig transition={{ type: "tween", duration: 0.15, ease: "easeInOut" }}>
+    <MotionConfig transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}>
       <QueryClientProvider client={queryClient}>
         <Suspense fallback={<Spin />}>
           <TooltipProvider>{children}</TooltipProvider>

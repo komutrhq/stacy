@@ -16,14 +16,7 @@ const options = { store: jotaiStore };
  * @returns - [atom, useAtom, useAtomValue, useSetAtom, jotaiStore.get, jotaiStore.set]
  */
 export const createAtomHooks = <T>(atom: PrimitiveAtom<T>) =>
-  [
-    atom,
-    () => useAtom(atom, options),
-    () => useAtomValue(atom, options),
-    () => useSetAtom(atom, options),
-    ...createAtomAccessor(atom),
-    createAtomSelector(atom),
-  ] as const;
+  [atom, () => useAtom(atom, options), () => useAtomValue(atom, options), () => useSetAtom(atom, options), ...createAtomAccessor(atom), createAtomSelector(atom)] as const;
 
 // @ts-ignore
 const noop = [];

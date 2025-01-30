@@ -16,7 +16,6 @@ export default defineConfig(({ mode }) => {
     plugins: [
       tsconfigPaths(),
       react(),
-       
     ],
     define: {
       APP_VERSION: JSON.stringify(pkg.version),

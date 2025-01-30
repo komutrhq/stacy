@@ -17,7 +17,7 @@
 		"enabled": true,
 		"indentStyle": "space",
 		"indentWidth": 2,
-		"lineWidth": 150
+		"lineWidth": 180
 	},
 	"organizeImports": {
 		"enabled": true
@@ -36,8 +36,7 @@
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off",
-				"noSvgWithoutTitle": "off",
-				"useSemanticElements": "off"
+				"noSvgWithoutTitle": "off"
 			},
 			"security": {
 				"noDangerouslySetInnerHtml": "warn"
