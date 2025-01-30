@@ -1,7 +1,6 @@
 package config
 
 import (
-	"context"
 	"log"
 	"os"
 	"strconv"
@@ -9,16 +8,19 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/redis/go-redis/v9"
 )
 
 type Config struct {
-	RedisAddr    string `validate:"required"`
-	WithFrontend bool   `validate:"required"`
-	WithAPI      bool   `validate:"required"`
-	WithWorker   bool   `validate:"required"`
-	Env          string `validate:"required"`
-	Mode         string `validate:"required,oneof=monolith backend frontend-only api-only worker-only"`
+	RedisAddr      string `validate:"required"`
+	RedisPassword  string
+	PostgresDSN    string `validate:"required"`
+	WithFrontend   bool   `validate:"required"`
+	WithAPI        bool   `validate:"required"`
+	WithWorker     bool   `validate:"required"`
+	Env            string `validate:"required"`
+	Mode           string `validate:"required,oneof=monolith backend frontend-only api-only worker-only"`
+	AllowGoogleSSO bool
+	AllowGithubSSO bool
 
 	// Worker specific configuration
 	WorkerConcurrency int `validate:"gte=0"`
@@ -39,6 +41,16 @@ func LoadConfig() Config {
 	redisAddr := "localhost:6379"
 	if value := os.Getenv("REDIS_ADDR"); value != "" {
 		redisAddr = value
+	}
+
+	redisPassword := ""
+	if value := os.Getenv("REDIS_PASSWORD"); value != "" {
+		redisPassword = value
+	}
+
+	postgresDSN := ""
+	if value := os.Getenv("POSTGRES_DSN"); value != "" {
+		postgresDSN = value
 	}
 
 	heartbeatInterval := 60
@@ -124,6 +136,23 @@ func LoadConfig() Config {
 		env = strings.ToLower(value)
 	}
 
+	allowGoogleSSO := true
+	if value := os.Getenv("ALLOW_GOOGLE_SSO"); value != "" {
+		allowGoogleSSO, err = strconv.ParseBool(value)
+		if err != nil {
+			log.Fatalf("invalid ALLOW_GOOGLE_SSO value: %v", err)
+		}
+	}
+
+	allowGithubSSO := true
+	if value := os.Getenv("ALLOW_GITHUB_SSO"); value != "" {
+		allowGithubSSO, err = strconv.ParseBool(value)
+		if err != nil {
+			log.Fatalf("invalid ALLOW_GITHUB_SSO value: %v", err)
+		}
+	}
+
+	// Zero concurrency means it will use up all usable CPUs.
 	workerConcurrency := 0
 	if value := os.Getenv("WORKER_CONCURRENCY"); value != "" {
 		workerConcurrency, err = strconv.Atoi(value)
@@ -134,6 +163,8 @@ func LoadConfig() Config {
 
 	return Config{
 		RedisAddr:         redisAddr,
+		RedisPassword:     redisPassword,
+		PostgresDSN:       postgresDSN,
 		HeartbeatInterval: heartbeatInterval,
 		APIPort:           apiPort,
 		FrontendPort:      frontendPort,
@@ -142,11 +173,13 @@ func LoadConfig() Config {
 		WithWorker:        withWorker,
 		Env:               env,
 		Mode:              mode,
+		AllowGoogleSSO:    allowGoogleSSO,
+		AllowGithubSSO:    allowGithubSSO,
 		WorkerConcurrency: workerConcurrency,
 	}
 }
 
-func ValidateConfig() Config {
+func New() Config {
 	cfg := LoadConfig()
 
 	validate := validator.New(validator.WithRequiredStructEnabled())
@@ -156,6 +189,8 @@ func ValidateConfig() Config {
 			switch err.StructField() {
 			case "RedisAddr":
 				log.Printf("invalid REDIS_ADDR (%v): %s", err.Value(), err.Error())
+			case "PostgresDSN":
+				log.Printf("invalid POSTGRES_DSN (%v): %s", err.Value(), err.Error())
 			case "HeartbeatInterval":
 				log.Printf("invalid HEARTBEAT_INTERVAL (%v): it must be between 1 to 3600 seconds", err.Value())
 			case "APIPort":
@@ -180,17 +215,6 @@ func ValidateConfig() Config {
 
 		log.Fatal()
 	}
-
-	// Check Redis connection. Do simple ping-pong test
-	redisClient := redis.NewClient(&redis.Options{
-		Addr: cfg.RedisAddr,
-	})
-	defer redisClient.Close()
-
-	if _, err := redisClient.Ping(context.Background()).Result(); err != nil {
-		log.Fatalf("could not connect to Redis (%s): %v", cfg.RedisAddr, err)
-	}
-	log.Printf("Successfully connected to Redis (%s)", cfg.RedisAddr)
 
 	return cfg
 }

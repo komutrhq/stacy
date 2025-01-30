@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"stacy/config"
+	"stacy/db"
 )
 
-func Run() {
-	cfg := config.LoadConfig()
+func Run(cfg *config.Config, db *db.DB) {
 
 	// Listen for signals
 	signals := make(chan os.Signal, 1)

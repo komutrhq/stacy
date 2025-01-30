@@ -16,12 +16,13 @@ import (
 	"stacy/config"
 )
 
-func Run() {
-	cfg := config.LoadConfig()
-
+func Run(cfg *config.Config) {
 	// Listen for signals
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+
+	os.Setenv("VITE_ALLOW_GOOGLE_SSO", fmt.Sprintf("%t", cfg.AllowGoogleSSO))
+	os.Setenv("VITE_ALLOW_GITHUB_SSO", fmt.Sprintf("%t", cfg.AllowGithubSSO))
 
 	if cfg.Env == "development" {
 		cmd := exec.Command("pnpm", "dev", fmt.Sprintf("--port=%d", cfg.FrontendPort))
@@ -54,15 +55,7 @@ func Run() {
 
 		router := gin.Default()
 		router.Use(static.Serve("/", static.LocalFile("./frontend/dist", true)))
-
-		api := router.Group("/api")
-		{
-			api.GET("/", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"message": "pong",
-				})
-			})
-		}
+		router.NoRoute(func(c *gin.Context) { c.File("./frontend/dist/index.html") })
 
 		server := &http.Server{
 			Addr:    fmt.Sprintf(":%d", cfg.FrontendPort),
