@@ -28,7 +28,7 @@ export function Component() {
 
   return (
     <Container size="1">
-      <div className="-mt-20 flex min-h-screen flex-col justify-center space-y-4 px-5">
+      <div className="-mt-20 flex min-h-screen flex-col justify-center space-y-4 px-2 md:px-12">
         <img src="/flag-in-hole.svg" alt="logo" className="mx-auto h-16 w-16" />
         <Text size="6" align="center" weight="medium">
           Forgot Password

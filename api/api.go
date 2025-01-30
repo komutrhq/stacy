@@ -7,15 +7,15 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"stacy/config"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
+
+	"stacy/config"
+	"stacy/db"
 )
 
-func Run() {
-	cfg := config.LoadConfig()
-
+func Run(cfg *config.Config, db *db.DB) {
 	// Listen for signals
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
