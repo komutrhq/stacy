@@ -22,5 +22,6 @@ clean:
 format:
 	gofmt -s -w .
 	cd frontend && pnpm format && cd ..
+	cd web && pnpm format && cd ..
 
 .PHONY: dev serve build clean format
